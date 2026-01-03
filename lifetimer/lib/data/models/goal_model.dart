@@ -78,4 +78,38 @@ class Goal extends Equatable {
         createdAt,
         updatedAt,
       ];
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'owner_id': ownerId,
+      'title': title,
+      'description': description,
+      'progress': progress,
+      'location_lat': locationLat,
+      'location_lng': locationLng,
+      'location_name': locationName,
+      'image_url': imageUrl,
+      'completed': completed,
+      'created_at': createdAt.toIso8601String(),
+      'updated_at': updatedAt.toIso8601String(),
+    };
+  }
+
+  factory Goal.fromJson(Map<String, dynamic> json) {
+    return Goal(
+      id: json['id'] as String,
+      ownerId: json['owner_id'] as String,
+      title: json['title'] as String,
+      description: json['description'] as String?,
+      progress: json['progress'] as int? ?? 0,
+      locationLat: json['location_lat'] as double?,
+      locationLng: json['location_lng'] as double?,
+      locationName: json['location_name'] as String?,
+      imageUrl: json['image_url'] as String?,
+      completed: json['completed'] as bool? ?? false,
+      createdAt: DateTime.parse(json['created_at'] as String),
+      updatedAt: DateTime.parse(json['updated_at'] as String),
+    );
+  }
 }
