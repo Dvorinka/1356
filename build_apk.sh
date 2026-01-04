@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Build APK Script for LifeTimer Flutter App
-# This script provides multiple approaches to build the APK
+# Build Script for LifeTimer Flutter App
+# Creates versioned APK in build/release directory
 
 echo "LifeTimer APK Build Script"
 echo "=========================="
@@ -12,77 +12,41 @@ cd lifetimer
 echo "Current directory: $(pwd)"
 echo "Flutter version: $(flutter --version | head -n 1)"
 
-# Approach 1: Try building debug APK with minimal changes
-echo ""
-echo "Approach 1: Building debug APK..."
-echo "================================"
+# Get version from pubspec.yaml
+VERSION=$(grep "version:" pubspec.yaml | cut -d' ' -f2 | cut -d'+' -f1)
+BUILD_NUMBER=$(grep "version:" pubspec.yaml | cut -d'+' -f2)
 
-# Temporarily disable problematic plugins
-echo "Temporarily disabling problematic plugins..."
+echo "Building LifeTimer version $VERSION (build $BUILD_NUMBER)"
 
-# Create a temporary pubspec.yaml without problematic dependencies
-cp pubspec.yaml pubspec.yaml.backup
+# Create release directory
+mkdir -p build/release
 
-# Comment out problematic dependencies
-sed -i 's/^  sign_in_with_apple:/  # sign_in_with_apple:/' pubspec.yaml
-sed -i 's/^  supabase_flutter:/  # supabase_flutter:/' pubspec.yaml
-
-# Clean and get dependencies
-flutter clean
-flutter pub get
-
-# Try building APK
-echo "Attempting to build APK..."
-if flutter build apk --debug; then
+# Build APK with version info and .env configuration
+echo "Building APK with .env configuration..."
+if flutter build apk --dart-define-from-file=.env --build-name=$VERSION --build-number=$BUILD_NUMBER; then
     echo "✅ APK build successful!"
-    echo "APK location: build/app/outputs/flutter-apk/app-debug.apk"
+    
+    # Copy to release directory with versioned name
+    cp build/app/outputs/flutter-apk/app-release.apk build/release/lifetimer-$VERSION-$BUILD_NUMBER.apk
+    
+    echo "✅ Build complete: build/release/lifetimer-$VERSION-$BUILD_NUMBER.apk"
     
     # Show APK info
-    ls -lh build/app/outputs/flutter-apk/app-debug.apk
-    
-    # Restore original pubspec.yaml
-    mv pubspec.yaml.backup pubspec.yaml
-    flutter pub get
+    ls -lh build/release/lifetimer-$VERSION-$BUILD_NUMBER.apk
     
     echo ""
-    echo "Build completed successfully!"
-    echo "You can install the APK with: adb install build/app/outputs/flutter-apk/app-debug.apk"
+    echo "You can install the APK with: adb install build/release/lifetimer-$VERSION-$BUILD_NUMBER.apk"
     
 else
-    echo "❌ APK build failed with Approach 1"
-    
-    # Restore original pubspec.yaml
-    mv pubspec.yaml.backup pubspec.yaml
-    flutter pub get
-    
+    echo "❌ APK build failed"
     echo ""
-    echo "Approach 2: Building with release mode..."
-    echo "====================================="
+    echo "Troubleshooting steps:"
+    echo "1. Update Flutter: flutter upgrade"
+    echo "2. Clean project: flutter clean && flutter pub get"
+    echo "3. Check Android SDK installation"
+    echo "4. Verify .env file exists and is properly formatted"
     
-    # Try release build
-    if flutter build apk --release; then
-        echo "✅ Release APK build successful!"
-        echo "APK location: build/app/outputs/flutter-apk/app-release.apk"
-        
-        # Show APK info
-        ls -lh build/app/outputs/flutter-apk/app-release.apk
-        
-        echo ""
-        echo "Build completed successfully!"
-        echo "You can install the APK with: adb install build/app/outputs/flutter-apk/app-release.apk"
-        
-    else
-        echo "❌ Both approaches failed"
-        echo ""
-        echo "Manual troubleshooting steps:"
-        echo "1. Update Flutter to latest version: flutter upgrade"
-        echo "2. Clean project: flutter clean && flutter pub get"
-        echo "3. Check Android SDK installation"
-        echo "4. Try building with specific target: flutter build apk --target-platform android-arm64"
-        echo "5. Consider updating problematic dependencies in pubspec.yaml"
-        
-        exit 1
-    fi
+    exit 1
 fi
 
 echo ""

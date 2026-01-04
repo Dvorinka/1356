@@ -1,10 +1,8 @@
 import 'dart:async';
-import 'package:flutter/foundation.dart' show kIsWeb;
 import '../models/user_model.dart';
 import '../../bootstrap/supabase_client.dart';
 import 'package:supabase_flutter/supabase_flutter.dart' as supabase;
 import 'package:google_sign_in/google_sign_in.dart';
-import 'package:sign_in_with_apple/sign_in_with_apple.dart';
 
 class AuthRepository {
   final supabase.SupabaseClient _client;
@@ -103,30 +101,6 @@ class AuthRepository {
     final response = await _client.auth.signInWithIdToken(
       provider: supabase.OAuthProvider.google,
       idToken: idToken,
-    );
-
-    if (response.user != null) {
-      await _ensureUserProfileExists(response.user!.id, response.user!);
-    }
-  }
-
-  Future<void> signInWithApple() async {
-    final credential = await SignInWithApple.getAppleIDCredential(
-      scopes: [
-        AppleIDAuthorizationScopes.email,
-        AppleIDAuthorizationScopes.fullName,
-      ],
-    );
-
-    final identityToken = credential.identityToken;
-    if (identityToken == null) {
-      throw Exception('No identity token from Apple sign-in');
-    }
-
-    final response = await _client.auth.signInWithIdToken(
-      provider: supabase.OAuthProvider.apple,
-      idToken: identityToken,
-      accessToken: credential.authorizationCode,
     );
 
     if (response.user != null) {

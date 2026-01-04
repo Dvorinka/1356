@@ -87,3 +87,35 @@ coverage/
 
 # OS generated files
 Thumbs.db
+
+# Documentation and project files
+ANALYTICS_SETUP_GUIDE.md
+APK_BUILD_GUIDE.md
+APP_STORE_ASSETS_GUIDE.md
+APP_STORE_METADATA.md
+architecture.md
+build_apk.sh
+CODE_REVIEW_REPORT.md
+database-schema.md
+development-roadmap.md
+flutter-project-structure.md
+GIT_RELEASE_GUIDE.md
+navigation-and-user-flows.md
+project.md
+requirements-functional.md
+requirements-nonfunctional.md
+SECURITY_AUDIT_REPORT.md
+security-and-privacy.md
+timeline.md
+ui-ux-spec.md
+
+# Images
+image.png
+image copy.png
+image copy 2.png
+Screenshot 2026-01-03 172853.png
+Screenshot 2026-01-03 172901.png
+Screenshot 2026-01-03 172907.png
+
+# Supabase directory
+supabase/

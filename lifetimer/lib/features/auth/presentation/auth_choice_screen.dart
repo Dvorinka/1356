@@ -35,23 +35,6 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
   }
 
 
-  Future<void> _handleAppleSignIn() async {
-    setState(() => _isLoading = true);
-    try {
-      await ref.read(authControllerProvider.notifier).signInWithApple();
-    } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Apple sign-in failed: $e')),
-        );
-      }
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
-    }
-  }
-
   Future<void> _handleGithubSignIn() async {
     setState(() => _isLoading = true);
     try {
@@ -162,13 +145,6 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
                             label: 'Continue with Google',
                             isLoading: _isLoading,
                             onPressed: _handleGoogleSignIn,
-                          ),
-                          const SizedBox(height: 12),
-                          _SocialButton(
-                            icon: Icons.apple,
-                            label: 'Continue with Apple',
-                            isLoading: _isLoading,
-                            onPressed: _handleAppleSignIn,
                           ),
                           const SizedBox(height: 12),
                           _SocialButton(

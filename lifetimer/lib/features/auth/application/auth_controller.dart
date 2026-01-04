@@ -56,11 +56,6 @@ class AuthController extends StateNotifier<User?> {
     _analytics.logSignIn(method: 'google');
   }
 
-  Future<void> signInWithApple() async {
-    await _authRepository.signInWithApple();
-    _analytics.logSignIn(method: 'apple');
-  }
-
   Future<void> signInWithGithub() async {
     await _authRepository.signInWithGithub();
     _analytics.logSignIn(method: 'github');
