@@ -10,6 +10,11 @@ class CountdownRepository {
 
   Future<app.User> startCountdown(String userId) async {
     try {
+      final user = await getCountdownInfo(userId);
+      if (user.countdownStartDate != null) {
+        throw const ValidationFailure('Countdown has already started and cannot be restarted');
+      }
+
       final startDate = DateTime.now();
       final endDate = DateTimeUtils.calculateEndDate(startDate);
 

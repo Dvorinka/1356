@@ -42,6 +42,32 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+/android/app/build/
+/android/build/
+/android/.gradle/
+
+# iOS build artifacts
+/ios/build/
+/ios/Flutter/Flutter.framework
+/ios/Flutter/Flutter.podspec
+/ios/.symlinks/
+/ios/Pods/
+
+# APK/AAB build files (for manual releases)
+*.apk
+*.aab
+
+# Gradle wrapper
+gradle-wrapper.jar
+/gradlew
+/gradlew.bat
+
+# Android local properties
+/local.properties
+
+# Generated files
+GeneratedPluginRegistrant.java
+.cxx/
 
 # Environment variables
 .env

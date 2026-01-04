@@ -24,30 +24,44 @@ class PrimaryButton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return SizedBox(
-      width: width,
-      height: height ?? 48,
-      child: ElevatedButton(
-        onPressed: (isLoading || isDisabled) ? null : onPressed,
-        style: ElevatedButton.styleFrom(
-          backgroundColor: backgroundColor,
-          foregroundColor: foregroundColor,
-          shape: RoundedRectangleBorder(
-            borderRadius: BorderRadius.circular(8),
-          ),
-        ),
-        child: isLoading
-            ? SizedBox(
-                height: 20,
-                width: 20,
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(
-                    foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+    final bool isEnabled = !isLoading && !isDisabled;
+
+    final ButtonStyle? buttonStyle =
+        (backgroundColor == null && foregroundColor == null)
+            ? null
+            : ElevatedButton.styleFrom(
+                backgroundColor: backgroundColor,
+                foregroundColor: foregroundColor,
+              );
+
+    return Semantics(
+      button: true,
+      enabled: isEnabled,
+      label: text,
+      hint: isLoading ? 'Loading' : null,
+      excludeSemantics: true,
+      child: SizedBox(
+        width: width,
+        height: height ?? 48,
+        child: ElevatedButton(
+          onPressed: isEnabled ? onPressed : null,
+          style: buttonStyle,
+          child: isLoading
+              ? Semantics(
+                  label: 'Loading',
+                  child: SizedBox(
+                    height: 20,
+                    width: 20,
+                    child: CircularProgressIndicator(
+                      strokeWidth: 2,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        foregroundColor ?? Theme.of(context).colorScheme.onPrimary,
+                      ),
+                    ),
                   ),
-                ),
-              )
-            : Text(text),
+                )
+              : Text(text),
+        ),
       ),
     );
   }

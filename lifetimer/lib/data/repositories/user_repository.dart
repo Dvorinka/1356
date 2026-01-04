@@ -27,6 +27,10 @@ class UserRepository {
     String? avatarUrl,
     String? bio,
     bool? isPublicProfile,
+    String? twitterHandle,
+    String? instagramHandle,
+    String? tiktokHandle,
+    String? websiteUrl,
   }) async {
     try {
       final updates = <String, dynamic>{};
@@ -34,6 +38,10 @@ class UserRepository {
       if (avatarUrl != null) updates['avatar_url'] = avatarUrl;
       if (bio != null) updates['bio'] = bio;
       if (isPublicProfile != null) updates['is_public_profile'] = isPublicProfile;
+      if (twitterHandle != null) updates['twitter_handle'] = twitterHandle;
+      if (instagramHandle != null) updates['instagram_handle'] = instagramHandle;
+      if (tiktokHandle != null) updates['tiktok_handle'] = tiktokHandle;
+      if (websiteUrl != null) updates['website_url'] = websiteUrl;
       updates['updated_at'] = DateTime.now().toIso8601String();
 
       final response = await _client

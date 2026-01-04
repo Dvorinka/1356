@@ -7,6 +7,10 @@ class User extends Equatable {
   final String? avatarUrl;
   final String? bio;
   final bool isPublicProfile;
+  final String? twitterHandle;
+  final String? instagramHandle;
+  final String? tiktokHandle;
+  final String? websiteUrl;
   final DateTime? countdownStartDate;
   final DateTime? countdownEndDate;
   final DateTime createdAt;
@@ -19,6 +23,10 @@ class User extends Equatable {
     this.avatarUrl,
     this.bio,
     this.isPublicProfile = false,
+    this.twitterHandle,
+    this.instagramHandle,
+    this.tiktokHandle,
+    this.websiteUrl,
     this.countdownStartDate,
     this.countdownEndDate,
     required this.createdAt,
@@ -44,6 +52,10 @@ class User extends Equatable {
     String? avatarUrl,
     String? bio,
     bool? isPublicProfile,
+    String? twitterHandle,
+    String? instagramHandle,
+    String? tiktokHandle,
+    String? websiteUrl,
     DateTime? countdownStartDate,
     DateTime? countdownEndDate,
     DateTime? createdAt,
@@ -56,6 +68,10 @@ class User extends Equatable {
       avatarUrl: avatarUrl ?? this.avatarUrl,
       bio: bio ?? this.bio,
       isPublicProfile: isPublicProfile ?? this.isPublicProfile,
+      twitterHandle: twitterHandle ?? this.twitterHandle,
+      instagramHandle: instagramHandle ?? this.instagramHandle,
+      tiktokHandle: tiktokHandle ?? this.tiktokHandle,
+      websiteUrl: websiteUrl ?? this.websiteUrl,
       countdownStartDate: countdownStartDate ?? this.countdownStartDate,
       countdownEndDate: countdownEndDate ?? this.countdownEndDate,
       createdAt: createdAt ?? this.createdAt,
@@ -71,6 +87,10 @@ class User extends Equatable {
         avatarUrl,
         bio,
         isPublicProfile,
+        twitterHandle,
+        instagramHandle,
+        tiktokHandle,
+        websiteUrl,
         countdownStartDate,
         countdownEndDate,
         createdAt,
@@ -85,6 +105,10 @@ class User extends Equatable {
       'avatar_url': avatarUrl,
       'bio': bio,
       'is_public_profile': isPublicProfile,
+      'twitter_handle': twitterHandle,
+      'instagram_handle': instagramHandle,
+      'tiktok_handle': tiktokHandle,
+      'website_url': websiteUrl,
       'countdown_start_date': countdownStartDate?.toIso8601String(),
       'countdown_end_date': countdownEndDate?.toIso8601String(),
       'created_at': createdAt.toIso8601String(),
@@ -100,6 +124,10 @@ class User extends Equatable {
       avatarUrl: json['avatar_url'] as String?,
       bio: json['bio'] as String?,
       isPublicProfile: json['is_public_profile'] as bool? ?? false,
+      twitterHandle: json['twitter_handle'] as String?,
+      instagramHandle: json['instagram_handle'] as String?,
+      tiktokHandle: json['tiktok_handle'] as String?,
+      websiteUrl: json['website_url'] as String?,
       countdownStartDate: json['countdown_start_date'] != null
           ? DateTime.parse(json['countdown_start_date'] as String)
           : null,

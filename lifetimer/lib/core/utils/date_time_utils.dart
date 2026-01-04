@@ -50,6 +50,10 @@ class DateTimeUtils {
     return DateFormat('MMM dd, yyyy').format(date);
   }
 
+  static String formatShortDate(DateTime date) {
+    return DateFormat('MMM yyyy').format(date);
+  }
+
   static String formatDateTime(DateTime dateTime) {
     return DateFormat('MMM dd, yyyy • HH:mm').format(dateTime);
   }

@@ -69,6 +69,21 @@ class GoalsRepository {
     }
   }
 
+  Future<bool> canModifyGoals(String userId) async {
+    try {
+      final response = await _client
+          .from('users')
+          .select('countdown_start_date')
+          .eq('id', userId)
+          .single();
+
+      final countdownStartDate = response['countdown_start_date'];
+      return countdownStartDate == null;
+    } catch (e) {
+      throw _handleError(e);
+    }
+  }
+
   Future<void> deleteGoal(String goalId) async {
     try {
       await _client.from('goals').delete().eq('id', goalId);
