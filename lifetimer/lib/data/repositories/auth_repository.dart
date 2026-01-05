@@ -84,27 +84,51 @@ class AuthRepository {
   }
 
   Future<void> signInWithGoogle() async {
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+    try {
+      final GoogleSignIn googleSignIn = GoogleSignIn(
+        scopes: ['email', 'profile'],
+      );
 
-    final googleUser = await googleSignIn.signIn();
-    if (googleUser == null) {
-      throw Exception('Google sign-in was cancelled');
+      // Check if user is already signed in
+      final googleUser = await googleSignIn.signInSilently();
+      if (googleUser != null) {
+        await _handleGoogleUser(googleUser);
+        return;
+      }
+
+      // Sign in interactively
+      final interactiveUser = await googleSignIn.signIn();
+      if (interactiveUser == null) {
+        throw Exception('Google sign-in was cancelled');
+      }
+
+      await _handleGoogleUser(interactiveUser);
+    } catch (e) {
+      throw Exception('Google sign-in failed: ${e.toString()}');
     }
+  }
 
-    final googleAuth = await googleUser.authentication;
-    final idToken = googleAuth.idToken;
+  Future<void> _handleGoogleUser(dynamic googleUser) async {
+    try {
+      final googleAuth = await googleUser.authentication;
+      final idToken = googleAuth.idToken;
+      final accessToken = googleAuth.accessToken;
 
-    if (idToken == null) {
-      throw Exception('No ID token from Google sign-in');
-    }
+      if (idToken == null && accessToken == null) {
+        throw Exception('No ID token or access token from Google sign-in');
+      }
 
-    final response = await _client.auth.signInWithIdToken(
-      provider: supabase.OAuthProvider.google,
-      idToken: idToken,
-    );
+      final response = await _client.auth.signInWithIdToken(
+        provider: supabase.OAuthProvider.google,
+        idToken: idToken,
+        accessToken: accessToken,
+      );
 
-    if (response.user != null) {
-      await _ensureUserProfileExists(response.user!.id, response.user!);
+      if (response.user != null) {
+        await _ensureUserProfileExists(response.user!.id, response.user!);
+      }
+    } catch (e) {
+      throw Exception('Failed to authenticate with Google: ${e.toString()}');
     }
   }
 

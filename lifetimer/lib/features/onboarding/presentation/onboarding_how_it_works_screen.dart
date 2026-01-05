@@ -17,10 +17,12 @@ class OnboardingHowItWorksScreen extends ConsumerWidget {
     return AppScaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Progress Bar and Navigation
+              _OnboardingProgress(currentStep: 2, totalSteps: 3),
               const SizedBox(height: 24),
               Text(
                 'How It Works',
@@ -50,13 +52,27 @@ class OnboardingHowItWorksScreen extends ConsumerWidget {
                 description: 'The countdown begins immediately. Track your progress and make every day count.',
                 icon: Icons.timer,
               ),
-              const Spacer(),
-              PrimaryButton(
-                onPressed: () {
-                  controller.completeStep('how_it_works');
-                  context.push('/onboarding/motivation');
-                },
-                text: 'Continue',
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => context.pop(),
+                      child: const Text('Back'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: PrimaryButton(
+                      onPressed: () {
+                        controller.completeStep('how_it_works');
+                        context.push('/onboarding/motivation');
+                      },
+                      text: 'Continue',
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
             ],
@@ -156,6 +172,47 @@ class _StepCard extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+class _OnboardingProgress extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const _OnboardingProgress({
+    required this.currentStep,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Step $currentStep of $totalSteps',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Back'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: currentStep / totalSteps,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }

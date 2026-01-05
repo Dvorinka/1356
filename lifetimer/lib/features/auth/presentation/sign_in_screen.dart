@@ -111,7 +111,7 @@ class _SignInScreenState extends ConsumerState<SignInScreen> {
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
                           Text(
-                            'LifeTimer',
+                            '1356',
                             style: Theme.of(context)
                                 .textTheme
                                 .titleMedium

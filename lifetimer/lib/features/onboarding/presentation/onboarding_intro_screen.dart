@@ -17,10 +17,12 @@ class OnboardingIntroScreen extends ConsumerWidget {
     return AppScaffold(
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Progress Bar and Navigation
+              _OnboardingProgress(currentStep: 1, totalSteps: 3),
               const SizedBox(height: 48),
               const Icon(
                 Icons.timer_outlined,
@@ -29,7 +31,7 @@ class OnboardingIntroScreen extends ConsumerWidget {
               ),
               const SizedBox(height: 32),
               Text(
-                'Welcome to LifeTimer',
+                'Welcome to 1356',
                 style: Theme.of(context).textTheme.headlineLarge?.copyWith(
                   fontWeight: FontWeight.bold,
                 ),
@@ -63,22 +65,31 @@ class OnboardingIntroScreen extends ConsumerWidget {
                 description: 'Watch yourself grow day by day',
               ),
               const Spacer(),
-              PrimaryButton(
-                onPressed: () {
-                  controller.completeStep('intro');
-                  context.push('/onboarding/how-it-works');
-                },
-                text: 'Get Started',
-              ),
-              const SizedBox(height: 16),
-              TextButton(
-                onPressed: () async {
-                  await controller.skipOnboarding();
-                  if (context.mounted) {
-                    context.push('/home');
-                  }
-                },
-                child: const Text('Skip onboarding'),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () async {
+                        await controller.skipOnboarding();
+                        if (context.mounted) {
+                          context.push('/home');
+                        }
+                      },
+                      child: const Text('Skip'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: PrimaryButton(
+                      onPressed: () {
+                        controller.completeStep('intro');
+                        context.push('/onboarding/how-it-works');
+                      },
+                      text: 'Get Started',
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
             ],
@@ -141,6 +152,47 @@ class _FeatureCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OnboardingProgress extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const _OnboardingProgress({
+    required this.currentStep,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Step $currentStep of $totalSteps',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Back'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: currentStep / totalSteps,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }

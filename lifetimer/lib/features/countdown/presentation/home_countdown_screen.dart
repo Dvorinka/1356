@@ -30,7 +30,9 @@ class _HomeCountdownScreenState extends ConsumerState<HomeCountdownScreen> {
 
     return AppScaffold(
       body: SafeArea(
-        child: countdownState.isLoading
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30.0, bottom: 30.0),
+          child: countdownState.isLoading
             ? const Center(child: LoadingIndicator())
             : countdownState.error != null
                 ? Center(
@@ -156,7 +158,7 @@ class _CountdownActiveScreen extends StatelessWidget {
       child: SingleChildScrollView(
         physics: const AlwaysScrollableScrollPhysics(),
         child: Padding(
-          padding: const EdgeInsets.all(24.0),
+          padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: [

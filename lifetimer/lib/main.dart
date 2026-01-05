@@ -13,6 +13,7 @@ void main() async {
     const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
       systemNavigationBarColor: Colors.transparent,
+      systemNavigationBarDividerColor: Colors.transparent,
     ),
   );
   
@@ -24,13 +25,13 @@ void main() async {
   
   runApp(
     const ProviderScope(
-      child: LifeTimerApp(),
+      child: App1356(),
     ),
   );
 }
 
-class LifeTimerApp extends ConsumerWidget {
-  const LifeTimerApp({super.key});
+class App1356 extends ConsumerWidget {
+  const App1356({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -38,7 +39,7 @@ class LifeTimerApp extends ConsumerWidget {
     final themeMode = ref.watch(themeModeProvider);
     
     return MaterialApp.router(
-      title: 'LifeTimer',
+      title: '1356',
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
       darkTheme: AppTheme.dark,

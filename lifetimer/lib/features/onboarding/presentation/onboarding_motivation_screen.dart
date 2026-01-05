@@ -16,11 +16,14 @@ class OnboardingMotivationScreen extends ConsumerWidget {
     
     return AppScaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              // Progress Bar and Navigation
+              _OnboardingProgress(currentStep: 3, totalSteps: 3),
               const SizedBox(height: 24),
               const Icon(
                 Icons.psychology_outlined,
@@ -65,16 +68,30 @@ class OnboardingMotivationScreen extends ConsumerWidget {
                 title: 'Celebrate Wins',
                 description: 'Every achievement is worth celebrating.',
               ),
-              const Spacer(),
-              PrimaryButton(
-                onPressed: () async {
-                  controller.completeStep('motivation');
-                  await controller.completeOnboarding();
-                  if (context.mounted) {
-                    context.push('/profile/create');
-                  }
-                },
-                text: 'Get Started',
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => context.pop(),
+                      child: const Text('Back'),
+                    ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: PrimaryButton(
+                      onPressed: () async {
+                        controller.completeStep('motivation');
+                        await controller.completeOnboarding();
+                        if (context.mounted) {
+                          context.push('/profile/create');
+                        }
+                      },
+                      text: 'Get Started',
+                    ),
+                  ),
+                ],
               ),
               const SizedBox(height: 16),
             ],
@@ -137,6 +154,47 @@ class _MotivationCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OnboardingProgress extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const _OnboardingProgress({
+    required this.currentStep,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Step $currentStep of $totalSteps',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Back'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: currentStep / totalSteps,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }

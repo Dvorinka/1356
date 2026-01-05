@@ -64,7 +64,7 @@ class AuthShowcaseScreen extends ConsumerWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'LifeTimer helps you design a 1356-day experiment, focus on a small set of meaningful goals, and see time as a single bold countdown.',
+                    '1356 helps you design a 1356-day experiment, focus on a small set of meaningful goals, and see time as a single bold countdown.',
                     style: theme.textTheme.bodyLarge?.copyWith(
                       color: colorScheme.onSurface.withValues(alpha:0.7),
                       height: 1.6,
