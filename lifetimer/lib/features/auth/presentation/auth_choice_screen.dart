@@ -102,7 +102,7 @@ class _AuthChoiceScreenState extends ConsumerState<AuthChoiceScreen> {
                           ),
                           const SizedBox(height: 24),
                           Text(
-                            'LifeTimer',
+                            '1356',
                             style: Theme.of(context)
                                 .textTheme
                                 .headlineLarge

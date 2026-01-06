@@ -1,10 +1,10 @@
-package com.example.lifetimer
+package com.example.app1356
 
 import android.appwidget.AppWidgetManager
 import android.content.Context
 import android.content.SharedPreferences
 import android.widget.RemoteViews
-import com.example.lifetimer.R
+import com.example.app1356.R
 import es.antonborri.home_widget.HomeWidgetProvider
 
 class NextCountdownWidgetProvider : HomeWidgetProvider() {
@@ -16,7 +16,7 @@ class NextCountdownWidgetProvider : HomeWidgetProvider() {
     ) {
         appWidgetIds.forEach { widgetId ->
             val title = widgetData.getString("next_title", "Next goal")
-            val subtitle = widgetData.getString("next_subtitle", "Open Lifetimer to see details")
+            val subtitle = widgetData.getString("next_subtitle", "Open 1356 to see details")
             val timeLeft = widgetData.getString("next_time_left", "0 days left")
 
             val views = RemoteViews(context.packageName, R.layout.next_countdown_widget).apply {

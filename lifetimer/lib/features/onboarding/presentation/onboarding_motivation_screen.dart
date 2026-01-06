@@ -16,100 +16,86 @@ class OnboardingMotivationScreen extends ConsumerWidget {
     
     return AppScaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            // Progress indicator and back button
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      context.pop();
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 3 / 3, // Step 3 of 3 (complete)
-                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 48), // Balance the back button
-                ],
+        child: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Progress Bar and Navigation
+              _OnboardingProgress(currentStep: 3, totalSteps: 3),
+              const SizedBox(height: 24),
+              const Icon(
+                Icons.psychology_outlined,
+                size: 80,
+                color: Colors.amber,
               ),
-            ),
-            // Scrollable content
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 8),
-                    const Icon(
-                      Icons.psychology_outlined,
-                      size: 64,
-                      color: Colors.amber,
+              const SizedBox(height: 24),
+              Text(
+                'Your Time is Now',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                '1356 days is approximately 3 years and 8 months.\n\n'
+                'That\'s enough time to transform your life, learn new skills, '
+                'build meaningful relationships, and achieve your biggest dreams.\n\n'
+                'Every day counts. Every step matters. Your journey begins now.',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 32),
+              const _MotivationCard(
+                icon: Icons.trending_up,
+                title: 'Track Progress',
+                description: 'Watch yourself grow as you complete goals and milestones.',
+              ),
+              const SizedBox(height: 16),
+              const _MotivationCard(
+                icon: Icons.people,
+                title: 'Join Community',
+                description: 'Connect with others on similar journeys (optional).',
+              ),
+              const SizedBox(height: 16),
+              const _MotivationCard(
+                icon: Icons.celebration,
+                title: 'Celebrate Wins',
+                description: 'Every achievement is worth celebrating.',
+              ),
+              const SizedBox(height: 16),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
+                      onPressed: () => context.pop(),
+                      child: const Text('Back'),
                     ),
-                    const SizedBox(height: 16),
-                    Text(
-                      'Your Time is Now',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 12),
-                    Text(
-                      '1356 days is approximately 3 years and 8 months.\n\n'
-                      'That\'s enough time to transform your life, learn new skills, '
-                      'build meaningful relationships, and achieve your biggest dreams.\n\n'
-                      'Every day counts. Every step matters. Your journey begins now.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 20),
-                    const _MotivationCard(
-                      icon: Icons.trending_up,
-                      title: 'Track Progress',
-                      description: 'Watch yourself grow as you complete goals and milestones.',
-                    ),
-                    const SizedBox(height: 10),
-                    const _MotivationCard(
-                      icon: Icons.people,
-                      title: 'Join Community',
-                      description: 'Connect with others on similar journeys (optional).',
-                    ),
-                    const SizedBox(height: 10),
-                    const _MotivationCard(
-                      icon: Icons.celebration,
-                      title: 'Celebrate Wins',
-                      description: 'Every achievement is worth celebrating.',
-                    ),
-                    const SizedBox(height: 24),
-                    PrimaryButton(
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: PrimaryButton(
                       onPressed: () async {
                         controller.completeStep('motivation');
                         await controller.completeOnboarding();
                         if (context.mounted) {
-                          context.push('/profile-setup');
+                          context.push('/profile/create');
                         }
                       },
                       text: 'Get Started',
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
@@ -168,6 +154,47 @@ class _MotivationCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OnboardingProgress extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const _OnboardingProgress({
+    required this.currentStep,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Step $currentStep of $totalSteps',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Back'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: currentStep / totalSteps,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }

@@ -16,105 +16,84 @@ class OnboardingIntroScreen extends ConsumerWidget {
     
     return AppScaffold(
       body: SafeArea(
-        child: Column(
-          children: [
-            // Progress indicator and back button
-            Padding(
-              padding: const EdgeInsets.all(24.0),
-              child: Row(
-                children: [
-                  IconButton(
-                    onPressed: () {
-                      // Can't go back from intro, go to auth choice
-                      context.push('/auth-choice');
-                    },
-                    icon: const Icon(Icons.arrow_back),
-                  ),
-                  Expanded(
-                    child: LinearProgressIndicator(
-                      value: 1 / 3, // Step 1 of 3
-                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
-                      valueColor: AlwaysStoppedAnimation<Color>(
-                        Theme.of(context).colorScheme.primary,
-                      ),
-                    ),
-                  ),
-                  const SizedBox(width: 48), // Balance the back button
-                ],
+        child: Padding(
+          padding: const EdgeInsets.only(top: 30.0, left: 24.0, right: 24.0, bottom: 30.0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              // Progress Bar and Navigation
+              _OnboardingProgress(currentStep: 1, totalSteps: 3),
+              const SizedBox(height: 48),
+              const Icon(
+                Icons.timer_outlined,
+                size: 100,
+                color: null,
               ),
-            ),
-            // Scrollable content
-            Expanded(
-              child: SingleChildScrollView(
-                padding: const EdgeInsets.symmetric(horizontal: 24.0),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
-                  children: [
-                    const SizedBox(height: 16),
-                    const Icon(
-                      Icons.timer_outlined,
-                      size: 64,
-                      color: null,
-                    ),
-                    const SizedBox(height: 20),
-                    Text(
-                      'Welcome to LifeTimer',
-                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                        fontWeight: FontWeight.bold,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 10),
-                    Text(
-                      'Your 1356-day journey starts here.\nCreate your bucket list and begin your countdown.',
-                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                        height: 1.5,
-                      ),
-                      textAlign: TextAlign.center,
-                    ),
-                    const SizedBox(height: 24),
-                    const _FeatureCard(
-                      icon: Icons.flag,
-                      title: 'Set Your Goals',
-                      description: 'Create a bucket list of 1-20 meaningful goals',
-                    ),
-                    const SizedBox(height: 10),
-                    const _FeatureCard(
-                      icon: Icons.lock_clock,
-                      title: 'Fixed Timeline',
-                      description: '1356 days to achieve everything - no extensions',
-                    ),
-                    const SizedBox(height: 10),
-                    const _FeatureCard(
-                      icon: Icons.trending_up,
-                      title: 'Track Progress',
-                      description: 'Watch yourself grow day by day',
-                    ),
-                    const SizedBox(height: 32),
-                    PrimaryButton(
-                      onPressed: () {
-                        controller.completeStep('intro');
-                        context.push('/onboarding/how-it-works');
-                      },
-                      text: 'Get Started',
-                    ),
-                    const SizedBox(height: 10),
-                    TextButton(
+              const SizedBox(height: 32),
+              Text(
+                'Welcome to 1356',
+                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                  fontWeight: FontWeight.bold,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 16),
+              Text(
+                'Your 1356-day journey starts here.\nCreate your bucket list and begin your countdown.',
+                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                  height: 1.5,
+                ),
+                textAlign: TextAlign.center,
+              ),
+              const SizedBox(height: 48),
+              const _FeatureCard(
+                icon: Icons.flag,
+                title: 'Set Your Goals',
+                description: 'Create a bucket list of 1-20 meaningful goals',
+              ),
+              const SizedBox(height: 16),
+              const _FeatureCard(
+                icon: Icons.lock_clock,
+                title: 'Fixed Timeline',
+                description: '1356 days to achieve everything - no extensions',
+              ),
+              const SizedBox(height: 16),
+              const _FeatureCard(
+                icon: Icons.trending_up,
+                title: 'Track Progress',
+                description: 'Watch yourself grow day by day',
+              ),
+              const Spacer(),
+              Row(
+                children: [
+                  Expanded(
+                    child: TextButton(
                       onPressed: () async {
                         await controller.skipOnboarding();
                         if (context.mounted) {
                           context.push('/home');
                         }
                       },
-                      child: const Text('Skip onboarding'),
+                      child: const Text('Skip'),
                     ),
-                    const SizedBox(height: 20),
-                  ],
-                ),
+                  ),
+                  const SizedBox(width: 16),
+                  Expanded(
+                    flex: 2,
+                    child: PrimaryButton(
+                      onPressed: () {
+                        controller.completeStep('intro');
+                        context.push('/onboarding/how-it-works');
+                      },
+                      text: 'Get Started',
+                    ),
+                  ),
+                ],
               ),
-            ),
-          ],
+              const SizedBox(height: 16),
+            ],
+          ),
         ),
       ),
     );
@@ -173,6 +152,47 @@ class _FeatureCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+class _OnboardingProgress extends StatelessWidget {
+  final int currentStep;
+  final int totalSteps;
+
+  const _OnboardingProgress({
+    required this.currentStep,
+    required this.totalSteps,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              'Step $currentStep of $totalSteps',
+              style: Theme.of(context).textTheme.bodySmall?.copyWith(
+                color: Theme.of(context).colorScheme.onSurface.withOpacity(0.6),
+              ),
+            ),
+            TextButton(
+              onPressed: () => context.pop(),
+              child: const Text('Back'),
+            ),
+          ],
+        ),
+        const SizedBox(height: 12),
+        LinearProgressIndicator(
+          value: currentStep / totalSteps,
+          backgroundColor: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+          valueColor: AlwaysStoppedAnimation<Color>(
+            Theme.of(context).colorScheme.primary,
+          ),
+        ),
+      ],
     );
   }
 }

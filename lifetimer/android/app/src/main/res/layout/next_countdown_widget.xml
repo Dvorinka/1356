@@ -2,7 +2,8 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#121212"
+    android:background="#1A1A1A"
+    android:backgroundTint="#2A2A2A"
     android:gravity="center_vertical"
     android:orientation="vertical"
     android:padding="12dp">
@@ -13,6 +14,7 @@
         android:layout_height="wrap_content"
         android:text="Next goal"
         android:textColor="#FFFFFF"
+        android:textStyle="bold"
         android:textSize="16sp"
         android:maxLines="1"
         android:ellipsize="end" />
@@ -23,7 +25,8 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="4dp"
         android:text="0 days left"
-        android:textColor="#FFCC66"
+        android:textColor="#4CAF50"
+        android:textStyle="bold"
         android:textSize="20sp"
         android:maxLines="1"
         android:ellipsize="end" />
@@ -33,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="2dp"
-        android:text="Open Lifetimer to see details"
+        android:text="Open 1356 to see details"
         android:textColor="#B3FFFFFF"
         android:textSize="12sp"
         android:maxLines="2"
