@@ -172,7 +172,7 @@ class _ProfileSetupScreenState extends ConsumerState<ProfileSetupScreen> {
           );
 
       if (mounted) {
-        context.go('/onboarding');
+        context.go('/home');
       }
     } catch (e) {
       if (mounted) {

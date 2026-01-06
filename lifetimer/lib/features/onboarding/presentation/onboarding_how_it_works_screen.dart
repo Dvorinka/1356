@@ -16,51 +16,82 @@ class OnboardingHowItWorksScreen extends ConsumerWidget {
     
     return AppScaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 24),
-              Text(
-                'How It Works',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+        child: Column(
+          children: [
+            // Progress indicator and back button
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                  ),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: 2 / 3, // Step 2 of 3
+                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 48), // Balance the back button
+                ],
+              ),
+            ),
+            // Scrollable content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 8),
+                    Text(
+                      'How It Works',
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    const _StepCard(
+                      number: 1,
+                      title: 'Create Your Bucket List',
+                      description: 'Add between 1 and 20 goals you want to achieve. Each goal can have a description, location, and image.',
+                      icon: Icons.edit_note,
+                    ),
+                    const SizedBox(height: 12),
+                    const _StepCard(
+                      number: 2,
+                      title: 'Finalize Your List',
+                      description: 'Once you\'re happy with your goals, confirm your bucket list. This action cannot be undone.',
+                      icon: Icons.lock,
+                    ),
+                    const SizedBox(height: 12),
+                    const _StepCard(
+                      number: 3,
+                      title: 'Start Your 1356-Day Journey',
+                      description: 'The countdown begins immediately. Track your progress and make every day count.',
+                      icon: Icons.timer,
+                    ),
+                    const SizedBox(height: 24),
+                    PrimaryButton(
+                      onPressed: () {
+                        controller.completeStep('how_it_works');
+                        context.push('/onboarding/motivation');
+                      },
+                      text: 'Continue',
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 32),
-              const _StepCard(
-                number: 1,
-                title: 'Create Your Bucket List',
-                description: 'Add between 1 and 20 goals you want to achieve. Each goal can have a description, location, and image.',
-                icon: Icons.edit_note,
-              ),
-              const SizedBox(height: 16),
-              const _StepCard(
-                number: 2,
-                title: 'Finalize Your List',
-                description: 'Once you\'re happy with your goals, confirm your bucket list. This action cannot be undone.',
-                icon: Icons.lock,
-              ),
-              const SizedBox(height: 16),
-              const _StepCard(
-                number: 3,
-                title: 'Start Your 1356-Day Journey',
-                description: 'The countdown begins immediately. Track your progress and make every day count.',
-                icon: Icons.timer,
-              ),
-              const Spacer(),
-              PrimaryButton(
-                onPressed: () {
-                  controller.completeStep('how_it_works');
-                  context.push('/onboarding/motivation');
-                },
-                text: 'Continue',
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );

@@ -13,9 +13,13 @@ class UserRepository {
           .from('users')
           .select()
           .eq('id', userId)
-          .single();
+          .maybeSingle();
 
-      return app.User.fromJson(response);
+      if (response != null) {
+        return app.User.fromJson(response);
+      } else {
+        throw const ServerFailure('User profile not found');
+      }
     } catch (e) {
       throw _handleError(e);
     }
@@ -48,10 +52,13 @@ class UserRepository {
           .from('users')
           .update(updates)
           .eq('id', userId)
-          .select()
-          .single();
+          .select();
 
-      return app.User.fromJson(response);
+      if (response.isNotEmpty) {
+        return app.User.fromJson(response.first);
+      } else {
+        throw const ServerFailure('Failed to update profile');
+      }
     } catch (e) {
       throw _handleError(e);
     }

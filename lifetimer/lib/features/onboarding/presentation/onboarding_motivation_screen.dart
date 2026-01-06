@@ -16,69 +16,100 @@ class OnboardingMotivationScreen extends ConsumerWidget {
     
     return AppScaffold(
       body: SafeArea(
-        child: Padding(
-          padding: const EdgeInsets.all(24.0),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              const SizedBox(height: 24),
-              const Icon(
-                Icons.psychology_outlined,
-                size: 80,
-                color: Colors.amber,
+        child: Column(
+          children: [
+            // Progress indicator and back button
+            Padding(
+              padding: const EdgeInsets.all(24.0),
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () {
+                      context.pop();
+                    },
+                    icon: const Icon(Icons.arrow_back),
+                  ),
+                  Expanded(
+                    child: LinearProgressIndicator(
+                      value: 3 / 3, // Step 3 of 3 (complete)
+                      backgroundColor: Theme.of(context).colorScheme.surfaceContainerHighest,
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary,
+                      ),
+                    ),
+                  ),
+                  const SizedBox(width: 48), // Balance the back button
+                ],
               ),
-              const SizedBox(height: 24),
-              Text(
-                'Your Time is Now',
-                style: Theme.of(context).textTheme.headlineLarge?.copyWith(
-                  fontWeight: FontWeight.bold,
+            ),
+            // Scrollable content
+            Expanded(
+              child: SingleChildScrollView(
+                padding: const EdgeInsets.symmetric(horizontal: 24.0),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    const SizedBox(height: 8),
+                    const Icon(
+                      Icons.psychology_outlined,
+                      size: 64,
+                      color: Colors.amber,
+                    ),
+                    const SizedBox(height: 16),
+                    Text(
+                      'Your Time is Now',
+                      style: Theme.of(context).textTheme.headlineLarge?.copyWith(
+                        fontWeight: FontWeight.bold,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 12),
+                    Text(
+                      '1356 days is approximately 3 years and 8 months.\n\n'
+                      'That\'s enough time to transform your life, learn new skills, '
+                      'build meaningful relationships, and achieve your biggest dreams.\n\n'
+                      'Every day counts. Every step matters. Your journey begins now.',
+                      style: Theme.of(context).textTheme.bodyLarge?.copyWith(
+                        color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
+                        height: 1.5,
+                      ),
+                      textAlign: TextAlign.center,
+                    ),
+                    const SizedBox(height: 20),
+                    const _MotivationCard(
+                      icon: Icons.trending_up,
+                      title: 'Track Progress',
+                      description: 'Watch yourself grow as you complete goals and milestones.',
+                    ),
+                    const SizedBox(height: 10),
+                    const _MotivationCard(
+                      icon: Icons.people,
+                      title: 'Join Community',
+                      description: 'Connect with others on similar journeys (optional).',
+                    ),
+                    const SizedBox(height: 10),
+                    const _MotivationCard(
+                      icon: Icons.celebration,
+                      title: 'Celebrate Wins',
+                      description: 'Every achievement is worth celebrating.',
+                    ),
+                    const SizedBox(height: 24),
+                    PrimaryButton(
+                      onPressed: () async {
+                        controller.completeStep('motivation');
+                        await controller.completeOnboarding();
+                        if (context.mounted) {
+                          context.push('/profile-setup');
+                        }
+                      },
+                      text: 'Get Started',
+                    ),
+                    const SizedBox(height: 20),
+                  ],
                 ),
-                textAlign: TextAlign.center,
               ),
-              const SizedBox(height: 16),
-              Text(
-                '1356 days is approximately 3 years and 8 months.\n\n'
-                'That\'s enough time to transform your life, learn new skills, '
-                'build meaningful relationships, and achieve your biggest dreams.\n\n'
-                'Every day counts. Every step matters. Your journey begins now.',
-                style: Theme.of(context).textTheme.bodyLarge?.copyWith(
-                  color: Theme.of(context).colorScheme.onSurface.withOpacity(0.8),
-                  height: 1.5,
-                ),
-                textAlign: TextAlign.center,
-              ),
-              const SizedBox(height: 32),
-              const _MotivationCard(
-                icon: Icons.trending_up,
-                title: 'Track Progress',
-                description: 'Watch yourself grow as you complete goals and milestones.',
-              ),
-              const SizedBox(height: 16),
-              const _MotivationCard(
-                icon: Icons.people,
-                title: 'Join Community',
-                description: 'Connect with others on similar journeys (optional).',
-              ),
-              const SizedBox(height: 16),
-              const _MotivationCard(
-                icon: Icons.celebration,
-                title: 'Celebrate Wins',
-                description: 'Every achievement is worth celebrating.',
-              ),
-              const Spacer(),
-              PrimaryButton(
-                onPressed: () async {
-                  controller.completeStep('motivation');
-                  await controller.completeOnboarding();
-                  if (context.mounted) {
-                    context.push('/profile/create');
-                  }
-                },
-                text: 'Get Started',
-              ),
-              const SizedBox(height: 16),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -101,10 +132,10 @@ class _MotivationCard extends StatelessWidget {
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Theme.of(context).colorScheme.primaryContainer.withOpacity(0.3),
+        color: Theme.of(context).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         border: Border.all(
-          color: Theme.of(context).colorScheme.primary.withOpacity(0.2),
+          color: Theme.of(context).colorScheme.outline.withOpacity(0.2),
         ),
       ),
       child: Row(
